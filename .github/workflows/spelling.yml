@@ -1,10 +1,10 @@
-- name: Extract and check spelling
+- name: Check spelling
         run: |
           python -c "
           import nbformat, glob, sys, subprocess
 
           # load ignored words
-          with open('.github/workflows/spelling/ignore.txt') as f:
+          with open('.github/workflows/ignore.txt') as f:
               ignored = set(w.strip().lower() for w in f if w.strip())
 
           errors = []
