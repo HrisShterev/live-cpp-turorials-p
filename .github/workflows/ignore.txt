@@ -17,3 +17,11 @@ pragma
 ifdef
 ifndef
 endif
+cudaEventRecord
+threadsPerBlock
+cpp
+vram
+struct
+blocksPerGrid
+png
+julia
