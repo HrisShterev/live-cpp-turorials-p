@@ -20,11 +20,22 @@ jobs:
           python -c "
           import nbformat, glob, sys
           errors = []
-          for f in glob.glob('**/*.ipynb', recursive=True):
+          notebooks = [
+              f for f in glob.glob('**/*.ipynb', recursive=True)
+              if '.ipynb_checkpoints' not in f
+          ]
+          if not notebooks:
+              print('No notebooks found!')
+              sys.exit(1)
+          for f in notebooks:
+              print(f'Checking {f}...')
               try:
                   nbformat.validate(nbformat.read(open(f), as_version=4))
+                  print(f'  ✓ ok')
               except Exception as e:
+                  print(f'  ✗ failed: {e}')
                   errors.append(f'{f}: {e}')
-          [print(e) for e in errors]
+          print(f'---')
+          print(f'{len(errors)} errors in {len(notebooks)} notebooks')
           sys.exit(len(errors))
           "
