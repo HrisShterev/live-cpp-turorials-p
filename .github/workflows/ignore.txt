@@ -31,3 +31,4 @@ cuComplex
 openmp
 vectoradd
 CudaGrid
+parallelising
