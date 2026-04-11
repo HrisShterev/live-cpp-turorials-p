@@ -32,3 +32,4 @@ openmp
 vectoradd
 CudaGrid
 parallelising
+omp

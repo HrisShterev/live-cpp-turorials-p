@@ -21,36 +21,47 @@ jobs:
       - name: Check spelling
         run: |
           python -c "
-          import nbformat, glob, sys, subprocess
+          import nbformat, glob, sys, subprocess, re
+          
+          # Regex to match code blocks (```...```) including newlines
+          CODE_BLOCK_RE = re.compile(r'```.*?```', re.DOTALL)
+
           with open('.github/workflows/ignore.txt') as f:
               ignored = set(w.strip().lower() for w in f if w.strip())
+          
           errors = []
           notebooks = [
               f for f in glob.glob('**/*.ipynb', recursive=True)
               if '.ipynb_checkpoints' not in f
           ]
+          
           for f in notebooks:
               print(f'Checking {f}...')
               nb = nbformat.read(open(f), as_version=4)
               for i, cell in enumerate(nb.cells):
                   if cell.cell_type != 'markdown':
                       continue
-                  with open('/tmp/cell.txt', 'w') as tmp:
-                      tmp.write(cell.source)
+                  
+                  # Strip code blocks from the markdown source
+                  clean_content = CODE_BLOCK_RE.sub('', cell.source)
+                  
                   result = subprocess.run(
                       ['aspell', 'list', '--lang=en'],
-                      stdin=open('/tmp/cell.txt'),
+                      input=clean_content,
                       capture_output=True, text=True
                   )
+                  
                   misspelled = [
                       w for w in result.stdout.strip().splitlines()
                       if w.lower() not in ignored
                   ]
+                  
                   if misspelled:
-                      for word in misspelled:
+                      for word in set(misspelled): # Use set to avoid duplicate alerts per cell
                           errors.append(f'{f} cell {i+1}: \"{word}\"')
                           print(f'  ✗ cell {i+1}: \"{word}\"')
+          
           print(f'---')
           print(f'{len(errors)} spelling errors in {len(notebooks)} notebooks')
-          sys.exit(len(errors))
+          sys.exit(1 if errors else 0)
           "
