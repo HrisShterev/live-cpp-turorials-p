@@ -33,3 +33,7 @@ vectoradd
 CudaGrid
 parallelising
 omp
+testpoint
+dx
+frac
+num
