@@ -37,3 +37,9 @@ testpoint
 dx
 frac
 num
+fibdata
+fibonachi
+th
+fibdata
+fs
+printf
