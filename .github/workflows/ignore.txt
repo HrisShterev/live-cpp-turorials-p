@@ -45,3 +45,4 @@ fs
 printf
 mutex
 bitwise
+cpus
