@@ -47,5 +47,5 @@ mutex
 bitwise
 cpus
 underpopulation
-parellelize
+parallelize
 atomics
