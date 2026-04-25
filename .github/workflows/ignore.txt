@@ -46,3 +46,6 @@ printf
 mutex
 bitwise
 cpus
+underpopulation
+parellelize
+atomics
